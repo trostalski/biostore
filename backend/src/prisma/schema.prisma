@@ -1,0 +1,116 @@
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id              Int               @id @default(autoincrement())
+  username        String            @unique
+  password        String
+  first_name      String
+  last_name       String
+  expertise       String?
+  created_methods method[]
+  safed_method    user_on_methods[]
+  reagents        reagent[]
+  devices         device[]
+}
+
+model user_on_methods {
+  user      user   @relation(fields: [user_id], references: [id])
+  user_id   Int
+  method    method @relation(fields: [method_id], references: [id])
+  method_id Int
+
+  @@id([user_id, method_id])
+}
+
+model category {
+  id      Int      @id @default(autoincrement())
+  name    String
+  methods method[]
+}
+
+model reagent {
+  id         Int                   @id @default(autoincrement())
+  name       String
+  company    String
+  product_id String?
+  user       user?                 @relation(fields: [user_id], references: [id])
+  user_id    Int?
+  methods    reagents_on_methods[]
+}
+
+model device {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  company            String
+  product_id         String?
+  user               user?                @relation(fields: [user_id], references: [id])
+  user_id            Int?
+  devices_on_methods devices_on_methods[]
+}
+
+model method {
+  id                Int                   @id @default(autoincrement())
+  name              String
+  created_at        DateTime              @default(now())
+  updated_at        DateTime              @updatedAt
+  duration          String?
+  description       String?
+  sections          String[]
+  comments          String[]
+  number_of_samples Int?
+  creator           user?                 @relation(fields: [creator_id], references: [id])
+  creator_id        Int?
+  user              user_on_methods[]
+  category          category?             @relation(fields: [category_id], references: [id])
+  category_id       Int?
+  reagents          reagents_on_methods[]
+  devices           devices_on_methods[]
+  method_samples    method_sample[]
+  method_steps      method_step[]
+}
+
+model reagents_on_methods {
+  reagent    reagent @relation(fields: [reagent_id], references: [id])
+  reagent_id Int
+  method     method  @relation(fields: [method_id], references: [id])
+  method_id  Int
+  amount     String?
+
+  @@id([reagent_id, method_id])
+}
+
+model devices_on_methods {
+  devices   device @relation(fields: [device_id], references: [id])
+  device_id Int
+  method    method @relation(fields: [method_id], references: [id])
+  method_id Int
+
+  @@id([device_id, method_id])
+}
+
+model method_step {
+  id          Int     @id @default(autoincrement())
+  description String
+  temperatur  String?
+  duration    String?
+  link        String?
+  method      method? @relation(fields: [method_id], references: [id])
+  method_id   Int?
+}
+
+model method_sample {
+  id              Int     @id @default(autoincrement())
+  condition_key   String?
+  condition_value String?
+  method          method? @relation(fields: [method_id], references: [id])
+  method_id       Int?
+}
