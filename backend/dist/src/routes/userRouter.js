@@ -16,6 +16,8 @@ exports.userRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const user_1 = require("../database/user");
+const middleware_1 = require("../auth/middleware");
+const category_1 = require("../database/category");
 const userRouter = express_1.default.Router();
 exports.userRouter = userRouter;
 const jsonParser = body_parser_1.default.json();
@@ -57,6 +59,15 @@ userRouter.get("/:id/methods", (req, res) => __awaiter(void 0, void 0, void 0, f
     try {
         const methods = yield (0, user_1.getMethodsForUser)(req.params.id);
         res.send(methods);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
+userRouter.get("/:id/categories", middleware_1.loggedIn, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const categories = yield (0, category_1.getCategoriesForUserWithMethods)(req.params.id);
+        res.send(categories);
     }
     catch (error) {
         console.log(error);

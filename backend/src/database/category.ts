@@ -2,11 +2,13 @@ import Prisma from "@prisma/client";
 import prisma from "./client";
 
 export const createCategory = async (input: Prisma.category) => {
-  await prisma.category.create({
+  const category: Prisma.category = await prisma.category.create({
     data: {
       name: input.name,
+      user_id: input.user_id,
     },
   });
+  return category;
 };
 
 export const updateCategory = async (
@@ -21,11 +23,31 @@ export const updateCategory = async (
   });
 };
 
-export const deleteCategory = async (id: string): Promise<void> => {
-  await prisma.category.delete({ where: { id: +id } });
+export const deleteCategory = async (id: string) => {
+  const category: Prisma.category = await prisma.category.delete({
+    where: { id: +id },
+  });
+  return category;
 };
 
 export const getCategory = async (id: string) => {
-  const category = await prisma.category.findUnique({ where: { id: +id } });
+  const category: Prisma.category | null = await prisma.category.findUnique({
+    where: { id: +id },
+  });
   return category;
+};
+
+export const getCategoriesForUser = async (userId: string) => {
+  const categories: Prisma.category[] = await prisma.category.findMany({
+    where: { user_id: +userId },
+  });
+  return categories;
+};
+
+export const getCategoriesForUserWithMethods = async (userId: string) => {
+  const categories: Prisma.category[] = await prisma.category.findMany({
+    where: { user_id: +userId },
+    include: { methods: true },
+  });
+  return categories;
 };

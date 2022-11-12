@@ -39,5 +39,13 @@ passport_1.default.use(new passport_local_1.default.Strategy(function verify(use
     });
 }));
 authRouter.post("/login", passport_1.default.authenticate("local", { failureMessage: true }), (req, res) => {
-    res.sendStatus(200);
+    res.send(req.user);
+});
+authRouter.post("/logout", function (req, res, next) {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.sendStatus(200);
+    });
 });

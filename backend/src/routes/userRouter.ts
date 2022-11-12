@@ -7,6 +7,11 @@ import {
   getUser,
   updateUser,
 } from "../database/user";
+import { loggedIn } from "../auth/middleware";
+import {
+  getCategoriesForUser,
+  getCategoriesForUserWithMethods,
+} from "../database/category";
 
 const userRouter: Router = express.Router();
 const jsonParser = bodyParser.json();
@@ -51,6 +56,15 @@ userRouter.get("/:id/methods", async (req, res) => {
   try {
     const methods = await getMethodsForUser(req.params.id);
     res.send(methods);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+userRouter.get("/:id/categories", loggedIn, async (req, res) => {
+  try {
+    const categories = await getCategoriesForUserWithMethods(req.params.id);
+    res.send(categories);
   } catch (error) {
     console.log(error);
   }

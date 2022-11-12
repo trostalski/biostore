@@ -41,8 +41,17 @@ authRouter.post(
   "/login",
   passport.authenticate("local", { failureMessage: true }),
   (req, res) => {
-    res.sendStatus(200);
+    res.send(req.user);
   }
 );
+
+authRouter.post("/logout", function (req, res, next) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.sendStatus(200);
+  });
+});
 
 export { authRouter };

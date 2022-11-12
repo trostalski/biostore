@@ -12,14 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCategory = exports.deleteCategory = exports.updateCategory = exports.createCategory = void 0;
+exports.getCategoriesForUserWithMethods = exports.getCategoriesForUser = exports.getCategory = exports.deleteCategory = exports.updateCategory = exports.createCategory = void 0;
 const client_1 = __importDefault(require("./client"));
 const createCategory = (input) => __awaiter(void 0, void 0, void 0, function* () {
-    yield client_1.default.category.create({
+    const category = yield client_1.default.category.create({
         data: {
             name: input.name,
+            user_id: input.user_id,
         },
     });
+    return category;
 });
 exports.createCategory = createCategory;
 const updateCategory = (id, input) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,11 +34,31 @@ const updateCategory = (id, input) => __awaiter(void 0, void 0, void 0, function
 });
 exports.updateCategory = updateCategory;
 const deleteCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    yield client_1.default.category.delete({ where: { id: +id } });
+    const category = yield client_1.default.category.delete({
+        where: { id: +id },
+    });
+    return category;
 });
 exports.deleteCategory = deleteCategory;
 const getCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const category = yield client_1.default.category.findUnique({ where: { id: +id } });
+    const category = yield client_1.default.category.findUnique({
+        where: { id: +id },
+    });
     return category;
 });
 exports.getCategory = getCategory;
+const getCategoriesForUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const categories = yield client_1.default.category.findMany({
+        where: { user_id: +userId },
+    });
+    return categories;
+});
+exports.getCategoriesForUser = getCategoriesForUser;
+const getCategoriesForUserWithMethods = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const categories = yield client_1.default.category.findMany({
+        where: { user_id: +userId },
+        include: { methods: true },
+    });
+    return categories;
+});
+exports.getCategoriesForUserWithMethods = getCategoriesForUserWithMethods;

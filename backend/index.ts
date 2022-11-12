@@ -5,6 +5,7 @@ import { userRouter } from "./src/routes/userRouter";
 import { authRouter } from "./src/routes/authRouter";
 import passport from "passport";
 import { methodRouter } from "./src/routes/methodRouter";
+import { categoryRouter } from "./src/routes/categoryRouter";
 
 const port: number = 8001;
 const app: Express = express();
@@ -36,6 +37,7 @@ app.use(passport.authenticate("session"));
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
 app.use("/method", methodRouter);
+app.use("/category", categoryRouter);
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
