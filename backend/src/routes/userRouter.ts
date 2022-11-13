@@ -14,6 +14,7 @@ import {
 } from "../database/category";
 import { getReagentsForUser } from "../database/reagent";
 import Prisma from "@prisma/client";
+import { getDevicesForUser } from "../database/device";
 
 const userRouter: Router = express.Router();
 const jsonParser = bodyParser.json();
@@ -66,6 +67,17 @@ userRouter.get("/:id/methods", async (req, res) => {
 userRouter.get("/:id/reagents", async (req, res) => {
   try {
     const reagents: Prisma.reagent[] | false = await getReagentsForUser(
+      req.params.id
+    );
+    res.send(reagents);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+userRouter.get("/:id/devices", async (req, res) => {
+  try {
+    const reagents: Prisma.device[] | false = await getDevicesForUser(
       req.params.id
     );
     res.send(reagents);

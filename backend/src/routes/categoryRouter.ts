@@ -19,7 +19,7 @@ categoryRouter.get("/:id", loggedIn, async (req, res) => {
   }
 });
 
-categoryRouter.post("/:id/delete", loggedIn, async (req, res) => {
+categoryRouter.post("/:id/delete", async (req, res) => {
   try {
     const category = await deleteCategory(req.params.id);
     res.send(category);

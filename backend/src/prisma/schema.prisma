@@ -34,7 +34,7 @@ model user_on_methods {
 
 model category {
   id      Int      @id @default(autoincrement())
-  name    String
+  name    String   @unique
   methods method[]
   user    user     @relation(fields: [user_id], references: [id])
   user_id Int
@@ -45,7 +45,9 @@ model reagent {
   name       String
   company    String
   product_id String?
-  user       user                 @relation(fields: [user_id], references: [id])
+  link       String?
+  type       String?
+  user       user                  @relation(fields: [user_id], references: [id])
   user_id    Int
   methods    reagents_on_methods[]
 }
@@ -55,6 +57,8 @@ model device {
   name               String
   company            String
   product_id         String?
+  link               String?
+  type               String?
   user               user                 @relation(fields: [user_id], references: [id])
   user_id            Int
   devices_on_methods devices_on_methods[]
@@ -73,7 +77,7 @@ model method {
   creator           user?                 @relation(fields: [creator_id], references: [id])
   creator_id        Int?
   user              user_on_methods[]
-  category          category?             @relation(fields: [category_id], references: [id])
+  category          category?             @relation(fields: [category_id], references: [id], onDelete: Cascade)
   category_id       Int?
   reagents          reagents_on_methods[]
   devices           devices_on_methods[]

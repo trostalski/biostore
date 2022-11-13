@@ -10,6 +10,8 @@ export const createReagent = async (
       company: input.company,
       product_id: input.product_id,
       user_id: input.user_id,
+      link: input.link,
+      type: input.type,
     },
   });
   return reagent;
@@ -25,6 +27,9 @@ export const updateReagent = async (
       name: input.name,
       company: input.company,
       product_id: input.product_id,
+      user_id: input.user_id,
+      link: input.link,
+      type: input.type,
     },
   });
   return updatedReagent;

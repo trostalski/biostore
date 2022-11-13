@@ -17,6 +17,29 @@ export const createMethod = async (input: Prisma.method) => {
   return method;
 };
 
+export const createNewMethod = async (input: Prisma.method) => {
+  // construct new date to generate a unique name for the new method
+  const date = new Date();
+  const dd = String(date.getDate()).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
+  const yyyy = date.getFullYear();
+
+  const today = mm + "/" + dd + "/" + yyyy;
+
+  const method: Prisma.method = await prisma.method.create({
+    data: {
+      name: `Untitled Method ${today}`,
+      category: {
+        connectOrCreate: {
+          where: { name: "Untitled Methods" },
+          create: { name: "Untitled Methods", user_id: input.creator_id! },
+        },
+      },
+    },
+  });
+  return method;
+};
+
 export const updateMethod = async (
   id: string,
   input: Prisma.method
