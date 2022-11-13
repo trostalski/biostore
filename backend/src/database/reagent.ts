@@ -9,6 +9,7 @@ export const createReagent = async (
       name: input.name,
       company: input.company,
       product_id: input.product_id,
+      user_id: input.user_id,
     },
   });
   return reagent;
@@ -29,8 +30,9 @@ export const updateReagent = async (
   return updatedReagent;
 };
 
-export const deleteReagent = async (id: string): Promise<void> => {
-  await prisma.reagent.delete({ where: { id: +id } });
+export const deleteReagent = async (id: string) => {
+  const reagent = await prisma.reagent.delete({ where: { id: +id } });
+  return reagent;
 };
 
 export const getReagent = async (
@@ -44,7 +46,7 @@ export const getReagent = async (
 
 export const getReagentsForUser = async (
   userId: string
-): Promise<Prisma.reagent[]> => {
+): Promise<Prisma.reagent[] | false> => {
   const reagents: Prisma.reagent[] = await prisma.reagent.findMany({
     where: { user_id: +userId },
   });

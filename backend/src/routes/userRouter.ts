@@ -12,6 +12,8 @@ import {
   getCategoriesForUser,
   getCategoriesForUserWithMethods,
 } from "../database/category";
+import { getReagentsForUser } from "../database/reagent";
+import Prisma from "@prisma/client";
 
 const userRouter: Router = express.Router();
 const jsonParser = bodyParser.json();
@@ -54,8 +56,19 @@ userRouter.post("/create", jsonParser, async (req, res, next) => {
 
 userRouter.get("/:id/methods", async (req, res) => {
   try {
-    const methods = await getMethodsForUser(req.params.id);
+    const methods: Prisma.method[] = await getMethodsForUser(req.params.id);
     res.send(methods);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+userRouter.get("/:id/reagents", async (req, res) => {
+  try {
+    const reagents: Prisma.reagent[] | false = await getReagentsForUser(
+      req.params.id
+    );
+    res.send(reagents);
   } catch (error) {
     console.log(error);
   }
@@ -63,7 +76,9 @@ userRouter.get("/:id/methods", async (req, res) => {
 
 userRouter.get("/:id/categories", loggedIn, async (req, res) => {
   try {
-    const categories = await getCategoriesForUserWithMethods(req.params.id);
+    const categories: Prisma.category[] = await getCategoriesForUserWithMethods(
+      req.params.id
+    );
     res.send(categories);
   } catch (error) {
     console.log(error);

@@ -20,6 +20,7 @@ const createReagent = (input) => __awaiter(void 0, void 0, void 0, function* () 
             name: input.name,
             company: input.company,
             product_id: input.product_id,
+            user_id: input.user_id,
         },
     });
     return reagent;
@@ -38,7 +39,8 @@ const updateReagent = (id, input) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.updateReagent = updateReagent;
 const deleteReagent = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    yield client_1.default.reagent.delete({ where: { id: +id } });
+    const reagent = yield client_1.default.reagent.delete({ where: { id: +id } });
+    return reagent;
 });
 exports.deleteReagent = deleteReagent;
 const getReagent = (id) => __awaiter(void 0, void 0, void 0, function* () {

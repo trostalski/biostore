@@ -6,6 +6,7 @@ import { authRouter } from "./src/routes/authRouter";
 import passport from "passport";
 import { methodRouter } from "./src/routes/methodRouter";
 import { categoryRouter } from "./src/routes/categoryRouter";
+import { reagentRouter } from "./src/routes/reagentRouter";
 
 const port: number = 8001;
 const app: Express = express();
@@ -28,7 +29,7 @@ app.use(
     secret: "secret",
     resave: false,
     saveUninitialized: false,
-    cookie: {},
+    cookie: { maxAge: 600000 },
   })
 );
 app.use(passport.initialize());
@@ -38,6 +39,7 @@ app.use("/user", userRouter);
 app.use("/auth", authRouter);
 app.use("/method", methodRouter);
 app.use("/category", categoryRouter);
+app.use("/reagent", reagentRouter);
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);

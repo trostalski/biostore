@@ -45,8 +45,8 @@ model reagent {
   name       String
   company    String
   product_id String?
-  user       user?                 @relation(fields: [user_id], references: [id])
-  user_id    Int?
+  user       user                 @relation(fields: [user_id], references: [id])
+  user_id    Int
   methods    reagents_on_methods[]
 }
 
