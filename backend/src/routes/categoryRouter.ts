@@ -10,7 +10,7 @@ import {
 const categoryRouter = express.Router();
 const jsonParser = bodyParser.json();
 
-categoryRouter.get("/:id", loggedIn, async (req, res) => {
+categoryRouter.get("/:id", async (req, res) => {
   try {
     const category = await getCategory(req.body);
     res.send(category);

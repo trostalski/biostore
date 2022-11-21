@@ -2,7 +2,7 @@ import Prisma from "@prisma/client";
 import prisma from "./client";
 
 export const createReagent = async (
-  input: Prisma.reagent
+  input: Prisma.reagent & Prisma.reagents_on_methods
 ): Promise<Prisma.reagent> => {
   const reagent: Prisma.reagent = await prisma.reagent.create({
     data: {
@@ -14,15 +14,26 @@ export const createReagent = async (
       type: input.type,
     },
   });
+
+  if (input.method_id) {
+    await prisma.reagents_on_methods.create({
+      data: {
+        method_id: input.method_id,
+        reagent_id: reagent.id,
+        amount: input.amount,
+      },
+    });
+  }
   return reagent;
 };
 
 export const updateReagent = async (
-  id: string,
-  input: Prisma.reagent
+  reagentId: string,
+  input: Prisma.reagent & Prisma.reagents_on_methods,
+  methodId?: string
 ): Promise<Prisma.reagent> => {
   const updatedReagent: Prisma.reagent = await prisma.reagent.update({
-    where: { id: +id },
+    where: { id: +reagentId },
     data: {
       name: input.name,
       company: input.company,
@@ -32,6 +43,14 @@ export const updateReagent = async (
       type: input.type,
     },
   });
+  if (input.amount && input.method_id) {
+    prisma.reagents_on_methods.update({
+      where: {
+        reagent_id_method_id: { method_id: +methodId!, reagent_id: +reagentId },
+      },
+      data: { amount: input.amount },
+    });
+  }
   return updatedReagent;
 };
 
@@ -54,6 +73,22 @@ export const getReagentsForUser = async (
 ): Promise<Prisma.reagent[] | false> => {
   const reagents: Prisma.reagent[] = await prisma.reagent.findMany({
     where: { user_id: +userId },
+    include: { methods: true },
+  });
+  return reagents;
+};
+
+export const getAllReagents = async (): Promise<Prisma.reagent[]> => {
+  const reagents: Prisma.reagent[] = await prisma.reagent.findMany();
+  return reagents;
+};
+
+export const getReagentsForMethod = async (
+  methodId: string
+): Promise<Prisma.reagent[] | false> => {
+  const reagents: any = await prisma.reagents_on_methods.findMany({
+    where: { method_id: +methodId },
+    select: { reagent: true, amount: true },
   });
   return reagents;
 };

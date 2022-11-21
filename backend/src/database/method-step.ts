@@ -4,10 +4,12 @@ import prisma from "./client";
 export const createMethodStep = async (input: Prisma.method_step) => {
   await prisma.method_step.create({
     data: {
-      description: input.description,
-      temperatur: input.temperatur,
+      number: +input.number,
+      day: input.day,
+      time: input.time,
+      temperature: input.temperature,
       duration: input.duration,
-      link: input.link,
+      description: input.description,
       method_id: input.method_id,
     },
   });
@@ -20,10 +22,12 @@ export const updateMethodStep = async (
   const updatedUser = await prisma.method_step.update({
     where: { id: +id },
     data: {
-      description: input.description,
-      temperatur: input.temperatur,
+      number: +input.number,
+      day: input.day,
+      time: input.time,
+      temperature: input.temperature,
       duration: input.duration,
-      link: input.link,
+      description: input.description,
       method_id: input.method_id,
     },
   });
@@ -34,8 +38,15 @@ export const deleteMethodStep = async (id: string): Promise<void> => {
 };
 
 export const getMethodStep = async (id: string) => {
-  const method_step = await prisma.method_step.findUnique({
+  const methodStep = await prisma.method_step.findUnique({
     where: { id: +id },
   });
-  return method_step;
+  return methodStep;
+};
+
+export const getStepsForMethod = async (methodId: string) => {
+  const methodSteps = await prisma.method_step.findMany({
+    where: { method_id: +methodId },
+  });
+  return methodSteps;
 };

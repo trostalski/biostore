@@ -4,11 +4,21 @@ import { loggedIn } from "../auth/middleware";
 import {
   createReagent,
   deleteReagent,
+  getAllReagents,
   updateReagent,
 } from "../database/reagent";
 
 const reagentRouter = express.Router();
 const jsonParser = bodyParser.json();
+
+reagentRouter.get("/all", loggedIn, async (req, res) => {
+  try {
+    const reagents = await getAllReagents();
+    res.send(reagents);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 reagentRouter.get("/:id", loggedIn, (req, res) => {
   res.send(req.params.id);

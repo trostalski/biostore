@@ -29,7 +29,6 @@ userRouter.get("/current", (req, res) => {
 
 // get, update, delete user by id
 userRouter.get("/:id", async (req, res) => {
-  console.log(req.params.id);
   res.send(await getUser(req.params.id));
 });
 
@@ -77,16 +76,16 @@ userRouter.get("/:id/reagents", async (req, res) => {
 
 userRouter.get("/:id/devices", async (req, res) => {
   try {
-    const reagents: Prisma.device[] | false = await getDevicesForUser(
+    const devices: Prisma.device[] | false = await getDevicesForUser(
       req.params.id
     );
-    res.send(reagents);
+    res.send(devices);
   } catch (error) {
     console.log(error);
   }
 });
 
-userRouter.get("/:id/categories", loggedIn, async (req, res) => {
+userRouter.get("/:id/categories", async (req, res) => {
   try {
     const categories: Prisma.category[] = await getCategoriesForUserWithMethods(
       req.params.id
