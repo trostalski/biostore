@@ -20,10 +20,19 @@ const reagent_1 = require("../database/reagent");
 const reagentRouter = express_1.default.Router();
 exports.reagentRouter = reagentRouter;
 const jsonParser = body_parser_1.default.json();
+reagentRouter.get("/all", middleware_1.loggedIn, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const reagents = yield (0, reagent_1.getAllReagents)();
+        res.send(reagents);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
 reagentRouter.get("/:id", middleware_1.loggedIn, (req, res) => {
     res.send(req.params.id);
 });
-reagentRouter.delete("/:id", middleware_1.loggedIn, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+reagentRouter.delete("/:id/delete", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const deletedReagent = yield (0, reagent_1.deleteReagent)(req.params.id);
         res.send(deletedReagent);
@@ -35,6 +44,15 @@ reagentRouter.delete("/:id", middleware_1.loggedIn, (req, res) => __awaiter(void
 reagentRouter.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const reagent = yield (0, reagent_1.createReagent)(req.body);
+        res.send(reagent);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
+reagentRouter.post("/:id/update", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const reagent = yield (0, reagent_1.updateReagent)(req.params.id, req.body);
         res.send(reagent);
     }
     catch (error) {

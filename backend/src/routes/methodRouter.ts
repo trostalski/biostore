@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 import { loggedIn } from "../auth/middleware";
+import { getCommentsForMethod } from "../database/comment";
 import { getDevicesForMethod } from "../database/device";
 import {
   connectDevicesToMethods,
@@ -111,6 +112,15 @@ methodRouter.get("/:id/steps", async (req, res) => {
   try {
     const samples = await getStepsForMethod(req.params.id);
     res.send(samples);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+methodRouter.get("/:id/comments", async (req, res) => {
+  try {
+    const comments = await getCommentsForMethod(req.params.id);
+    res.send(comments);
   } catch (error) {
     console.log(error);
   }

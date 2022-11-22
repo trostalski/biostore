@@ -14,13 +14,14 @@ export const createCategory = async (input: Prisma.category) => {
 export const updateCategory = async (
   id: string,
   input: Prisma.category
-): Promise<void> => {
-  const updatedUser = await prisma.category.update({
+): Promise<Prisma.category> => {
+  const updatedCategory = await prisma.category.update({
     where: { id: +id },
     data: {
       name: input.name,
     },
   });
+  return updatedCategory;
 };
 
 export const deleteCategory = async (id: string) => {

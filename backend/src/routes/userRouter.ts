@@ -85,9 +85,20 @@ userRouter.get("/:id/devices", async (req, res) => {
   }
 });
 
-userRouter.get("/:id/categories", async (req, res) => {
+userRouter.get("/:id/categories-with-methods", async (req, res) => {
   try {
     const categories: Prisma.category[] = await getCategoriesForUserWithMethods(
+      req.params.id
+    );
+    res.send(categories);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+userRouter.get("/:id/categories-no-methods", async (req, res) => {
+  try {
+    const categories: Prisma.category[] = await getCategoriesForUser(
       req.params.id
     );
     res.send(categories);

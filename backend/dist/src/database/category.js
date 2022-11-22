@@ -25,12 +25,13 @@ const createCategory = (input) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.createCategory = createCategory;
 const updateCategory = (id, input) => __awaiter(void 0, void 0, void 0, function* () {
-    const updatedUser = yield client_1.default.category.update({
+    const updatedCategory = yield client_1.default.category.update({
         where: { id: +id },
         data: {
             name: input.name,
         },
     });
+    return updatedCategory;
 });
 exports.updateCategory = updateCategory;
 const deleteCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {

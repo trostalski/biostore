@@ -15,12 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.categoryRouter = void 0;
 const body_parser_1 = __importDefault(require("body-parser"));
 const express_1 = __importDefault(require("express"));
-const middleware_1 = require("../auth/middleware");
 const category_1 = require("../database/category");
 const categoryRouter = express_1.default.Router();
 exports.categoryRouter = categoryRouter;
 const jsonParser = body_parser_1.default.json();
-categoryRouter.get("/:id", middleware_1.loggedIn, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+categoryRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const category = yield (0, category_1.getCategory)(req.body);
         res.send(category);
@@ -29,7 +28,7 @@ categoryRouter.get("/:id", middleware_1.loggedIn, (req, res) => __awaiter(void 0
         console.log(error);
     }
 }));
-categoryRouter.post("/:id/delete", middleware_1.loggedIn, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+categoryRouter.post("/:id/delete", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const category = yield (0, category_1.deleteCategory)(req.params.id);
         res.send(category);

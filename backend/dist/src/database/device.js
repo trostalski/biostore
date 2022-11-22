@@ -12,35 +12,75 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCategory = exports.deleteCategory = exports.updateReagent = exports.createDevice = void 0;
+exports.getDevicesForMethod = exports.getAllDevices = exports.getDevicesForUser = exports.getDevice = exports.deleteDevice = exports.updateDevice = exports.createDevice = void 0;
 const client_1 = __importDefault(require("./client"));
 const createDevice = (input) => __awaiter(void 0, void 0, void 0, function* () {
-    yield client_1.default.device.create({
+    const device = yield client_1.default.device.create({
         data: {
             name: input.name,
             company: input.company,
             product_id: input.product_id,
+            user_id: input.user_id,
+            link: input.link,
+            type: input.type,
         },
     });
+    if (input.method_id) {
+        yield client_1.default.devices_on_methods.create({
+            data: {
+                method_id: input.method_id,
+                device_id: device.id,
+            },
+        });
+    }
+    return device;
 });
 exports.createDevice = createDevice;
-const updateReagent = (id, input) => __awaiter(void 0, void 0, void 0, function* () {
-    const updatedUser = yield client_1.default.device.update({
-        where: { id: +id },
+const updateDevice = (deviceId, input) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedDevice = yield client_1.default.device.update({
+        where: { id: +deviceId },
         data: {
             name: input.name,
             company: input.company,
             product_id: input.product_id,
+            user_id: input.user_id,
+            link: input.link,
+            type: input.type,
         },
     });
+    return updatedDevice;
 });
-exports.updateReagent = updateReagent;
-const deleteCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    yield client_1.default.device.delete({ where: { id: +id } });
+exports.updateDevice = updateDevice;
+const deleteDevice = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const device = yield client_1.default.device.delete({ where: { id: +id } });
+    return device;
 });
-exports.deleteCategory = deleteCategory;
-const getCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const reagent = yield client_1.default.device.findUnique({ where: { id: +id } });
-    return reagent;
+exports.deleteDevice = deleteDevice;
+const getDevice = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const device = yield client_1.default.device.findUnique({
+        where: { id: +id },
+    });
+    return device;
 });
-exports.getCategory = getCategory;
+exports.getDevice = getDevice;
+const getDevicesForUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const Devices = yield client_1.default.device.findMany({
+        where: { user_id: +userId },
+        include: { methods: true },
+    });
+    return Devices;
+});
+exports.getDevicesForUser = getDevicesForUser;
+const getAllDevices = () => __awaiter(void 0, void 0, void 0, function* () {
+    const devices = yield client_1.default.device.findMany();
+    return devices;
+});
+exports.getAllDevices = getAllDevices;
+const getDevicesForMethod = (methodId) => __awaiter(void 0, void 0, void 0, function* () {
+    const devices = yield client_1.default.devices_on_methods.findMany({
+        where: { method_id: +methodId },
+        select: { device: true },
+    });
+    return devices;
+});
+exports.getDevicesForMethod = getDevicesForMethod;
