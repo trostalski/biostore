@@ -18,13 +18,14 @@ export const createMethod = async (input: Prisma.method) => {
 
 export const createNewMethod = async (input: Prisma.method) => {
   // construct new date to generate a unique name for the new method
+  console.log(input)
   const method: Prisma.method = await prisma.method.create({
     data: {
       name: "",
       creator: { connect: { id: +input.creator_id } },
       category: {
         connectOrCreate: {
-          where: { name: "All Methods" },
+          where: { id: +input.category_id! },
           create: { name: "All Methods", user_id: input.creator_id! },
         },
       },

@@ -48,7 +48,7 @@ const Home = () => {
     fetch(SERVER_BASE + "method/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ creator_id: user.id }),
+      body: JSON.stringify({ creator_id: user.id, category_id: 1 }),
     })
       .then((res) => {
         if (res.status == 200) {
@@ -105,7 +105,7 @@ const Home = () => {
               pl={6}
             >
               <Grid item xs={8}>
-                <Typography variant="h5">My Methods</Typography>
+                <Typography variant="h5">Methods</Typography>
               </Grid>
               <Grid item sx={{ mb: 4 }}>
                 <Button variant="contained" onClick={handleCreateMethod}>

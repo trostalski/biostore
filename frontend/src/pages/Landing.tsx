@@ -27,12 +27,15 @@ const Landing = () => {
         <Grid
           item
           display={"flex"}
-          alignItems="center"
-          justifyContent={"center"}
+          justifyContent={"flex-start"}
           xs={8}
           sx={{ height: "100vh" }}
         >
-          <Image src="https://images.unsplash.com/photo-1576086213369-97a306d36557?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80"></Image>
+          <Image
+            src="https://images.unsplash.com/photo-1576086213369-97a306d36557?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80"
+            height={"100%"}
+            width={"100%"}
+          ></Image>
         </Grid>
         <Grid item xs={4} sx={{ p: 4, mt: 6 }}>
           <Box sx={{ width: "100%", height: "100%", bgcolor: "white" }}>

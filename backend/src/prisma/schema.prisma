@@ -34,7 +34,7 @@ model user_on_methods {
 
 model category {
   id      Int      @id @default(autoincrement())
-  name    String   @unique
+  name    String   
   methods method[]
   user    user     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id Int
